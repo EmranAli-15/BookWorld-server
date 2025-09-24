@@ -1,15 +1,10 @@
 import { Request, Response } from "express"
 import AppError from "../../errors/AppError"
+import { handleAsync } from "../../utils/handleAsync"
 
-const createGategory = async (req: Request, res: Response) => {
-    try {
-        throw new AppError(500, "no way")
-    } catch (error:any) {
-        return res.status(500).json({
-            message: error.message
-        })
-    }
-}
+const createGategory = handleAsync((req: Request, res: Response) => {
+    throw new AppError(404, "No way chance")
+})
 
 
 
