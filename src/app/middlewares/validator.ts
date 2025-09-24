@@ -7,5 +7,6 @@ export const validator = (schema: Joi.ObjectSchema) => {
         async (req: Request, res: Response, next: NextFunction) => {
             await schema.validateAsync(req.body, { errors: { wrap: { label: "" } } });
             next();
-        })
+        }
+    )
 }
