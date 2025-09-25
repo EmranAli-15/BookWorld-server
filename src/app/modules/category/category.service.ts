@@ -11,8 +11,8 @@ const createCategory = async (category: string) => {
     return result;
 }
 
-const updateCategory = async (id: string, name: string) => {
-    const result = await Category.findByIdAndUpdate(id, { name }, { new: true });
+const updateCategory = async ({ id, body }: { id: any, body: any }) => {
+    const result = await Category.findByIdAndUpdate(id, body, { new: true });
     return result;
 }
 

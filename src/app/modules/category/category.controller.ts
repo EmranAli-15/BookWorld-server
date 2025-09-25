@@ -13,8 +13,9 @@ const createCategory = handleAsync(async (req: Request, res: Response) => {
 });
 
 const updateCategory = handleAsync(async (req: Request, res: Response) => {
-    const { id, name } = req.body;
-    const result = await categoryService.updateCategory(id, name);
+    const { id } = req.params;
+    const body = req.body;
+    const result = await categoryService.updateCategory({ id, body });
 
     res.status(201).json({
         message: "Category updated.",
