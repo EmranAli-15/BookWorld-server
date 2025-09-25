@@ -1,11 +1,12 @@
 import Joi from 'joi';
 
 const createCategorySchema = Joi.object({
-    name: Joi.string()
+    name: Joi.string().required()
 });
 
 const updateCategorySchema = Joi.object({
-    name: Joi.string()
+    id: Joi.string().required(),
+    name: Joi.string().required()
 });
 
 

@@ -10,10 +10,21 @@ const createCategory = handleAsync(async (req: Request, res: Response) => {
         message: "Category created.",
         data: result
     })
+});
+
+const updateCategory = handleAsync(async (req: Request, res: Response) => {
+    const { id, name } = req.body;
+    const result = await categoryService.updateCategory(id, name);
+
+    res.status(201).json({
+        message: "Category updated.",
+        data: result
+    })
 })
 
 
 
 export const categoryController = {
-    createCategory
+    createCategory,
+    updateCategory
 }
