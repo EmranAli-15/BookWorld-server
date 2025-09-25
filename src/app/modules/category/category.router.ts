@@ -5,7 +5,7 @@ import { categoryValidation } from './category.validation';
 import { auth } from '../../middlewares/auth';
 const route = express.Router();
 
-route.post('/category/createCategory', validator(categoryValidation.createCategorySchema), auth('admin'), categoryController.createGategory);
+route.post('/category/createCategory', validator(categoryValidation.createCategorySchema), auth('admin'), categoryController.createCategory);
 
 
 export const categoryRoutes = route;
