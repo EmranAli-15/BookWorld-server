@@ -5,7 +5,7 @@ import { bookService } from "./book.service";
 const createBook = handleAsync(
     async (req: Request, res: Response) => {
         const result = await bookService.createBook(req.body);
-        
+
         res.status(201).json({
             message: "Book uploaded.",
             data: result
@@ -38,8 +38,11 @@ const getSingleBook = handleAsync(
 
 const getAllBook = handleAsync(
     async (req: Request, res: Response) => {
-        const { page } = req.params;
-        const result = await bookService.getAllBooks(Number(page));
+        const { page, limit } = req.query;
+        const pageNum = Number(page)-1;
+        const limitNum = Number(limit);
+
+        const result = await bookService.getAllBooks({ pageNum, limitNum });
 
         res.status(201).json({
             message: "Books retrived.",

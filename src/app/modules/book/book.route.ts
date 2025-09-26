@@ -11,7 +11,7 @@ route.put("/book/updateBook", validator(bookValidation.updateBookValidation), au
 
 route.get("/book/getSingleBook/:id", bookController.getSingleBook);
 
-route.get("/book/getAllBook/:page", bookController.getAllBook);
+route.get("/book/getAllBooks", bookController.getAllBook);
 
 route.delete("/book/deleteBook/:id", bookController.deleteBook);
 

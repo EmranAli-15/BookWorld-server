@@ -21,9 +21,10 @@ const getSilgleBook = async (id: any) => {
     return result;
 };
 
-const getAllBooks = async (page: number) => {
-    const limit = 8;
-    const result = await Book.find().skip(page * limit).limit(limit).populate("category").populate("writer");
+const getAllBooks = async ({ pageNum, limitNum }: { pageNum: number, limitNum: number }) => {
+    const limit = limitNum || 8;
+    const result = await Book.find().skip(pageNum * limit).limit(limit).populate("category").populate("writer");
+    return result;
 };
 
 
