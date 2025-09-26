@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { handleAsync } from "../../utils/handleAsync";
 import { bookService } from "./book.service";
+import { Types } from "mongoose";
 
 const createBook = handleAsync(
     async (req: Request, res: Response) => {
@@ -39,7 +40,7 @@ const getSingleBook = handleAsync(
 const getAllBook = handleAsync(
     async (req: Request, res: Response) => {
         const { page, limit } = req.query;
-        const pageNum = Number(page)-1;
+        const pageNum = Number(page) - 1;
         const limitNum = Number(limit);
 
         const result = await bookService.getAllBooks({ pageNum, limitNum });
@@ -63,10 +64,36 @@ const deleteBook = handleAsync(
     }
 );
 
+const searchBook = handleAsync(
+    async (req: Request, res: Response) => {
+        const { text } = req.query;
+        const result = await bookService.searchBook(text as string);
+
+        res.status(200).json({
+            message: "Books searched.",
+            data: result
+        });
+    }
+);
+
+const getbooksByCategory = handleAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await bookService.getBooksByCategory(id as string);
+
+        res.status(200).json({
+            message: "Category books retrieved.",
+            data: result
+        });
+    }
+);
+
 export const bookController = {
     createBook,
     updateBook,
     getSingleBook,
     getAllBook,
     deleteBook,
+    searchBook,
+    getbooksByCategory
 }

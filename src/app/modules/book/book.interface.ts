@@ -7,5 +7,6 @@ export type TBook = {
     image: string,
     writer: ObjectId,
     rating: number,
+    quantity: number,
     summary: string
 };

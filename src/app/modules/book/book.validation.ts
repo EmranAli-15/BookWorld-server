@@ -7,6 +7,7 @@ const createBookValidation = Joi.object({
     image: Joi.string().allow(''),
     writer: Joi.string().required(),
     rating: Joi.number(),
+    quantity: Joi.number().required(),
     summary: Joi.string().allow('')
 });
 
@@ -18,6 +19,7 @@ const updateBookValidation = Joi.object({
     image: Joi.string().allow(''),
     writer: Joi.string().required(),
     rating: Joi.number(),
+    quantity: Joi.number().required(),
     summary: Joi.string().allow('')
 });
 

@@ -19,7 +19,7 @@ const updateCategory = async ({ id, body }: { id: any, body: any }) => {
 const getCategory = async() => {
     const result = await Category.find();
     return result;
-}
+};
 
 export const categoryService = {
     createCategory,

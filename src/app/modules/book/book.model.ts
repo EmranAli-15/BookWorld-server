@@ -20,6 +20,10 @@ const bookSchema = new Schema<TBook>(
             type: Number,
             required: true
         },
+        quantity: {
+            type: Number,
+            required: true
+        },
         writer: {
             type: Types.ObjectId,
             required: true,

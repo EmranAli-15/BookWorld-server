@@ -11,7 +11,11 @@ route.put("/book/updateBook", validator(bookValidation.updateBookValidation), au
 
 route.get("/book/getSingleBook/:id", bookController.getSingleBook);
 
+route.get("/book/getCategoryBook/:id", bookController.getbooksByCategory);
+
 route.get("/book/getAllBooks", bookController.getAllBook);
+
+route.get("/book/searchBook", bookController.searchBook);
 
 route.delete("/book/deleteBook/:id", bookController.deleteBook);
 

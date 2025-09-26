@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import AppError from "../../errors/AppError"
 import { handleAsync } from "../../utils/handleAsync"
 import { categoryService } from "./category.service"
 
@@ -26,7 +25,7 @@ const updateCategory = handleAsync(async (req: Request, res: Response) => {
 const getCategory = handleAsync(async (req: Request, res: Response) => {
     const result = await categoryService.getCategory();
 
-    res.status(201).json({
+    res.status(200).json({
         message: "Category retrieved.",
         data: result
     })
