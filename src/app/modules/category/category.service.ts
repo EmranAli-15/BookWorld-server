@@ -9,14 +9,20 @@ const createCategory = async (category: string) => {
 
     const result = await Category.create({ name: category });
     return result;
-}
+};
 
 const updateCategory = async ({ id, body }: { id: any, body: any }) => {
     const result = await Category.findByIdAndUpdate(id, body, { new: true });
+    return result;
+};
+
+const getCategory = async() => {
+    const result = await Category.find();
     return result;
 }
 
 export const categoryService = {
     createCategory,
-    updateCategory
+    updateCategory,
+    getCategory
 }

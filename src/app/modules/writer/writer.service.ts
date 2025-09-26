@@ -9,9 +9,15 @@ const createWriter = async (payload: TWriter) => {
 const updateWriter = async ({ id, body }: { id: any, body: TWriter }) => {
     const result = await Writer.findByIdAndUpdate(id, body, { new: true });
     return result;
-}
+};
+
+const getWriter = async () => {
+    const result = await Writer.find();
+    return result;
+};
 
 export const writerService = {
     createWriter,
-    updateWriter
+    updateWriter,
+    getWriter
 };

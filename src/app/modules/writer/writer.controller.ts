@@ -22,8 +22,18 @@ const updateWriter = handleAsync(async (req: Request, res: Response) => {
     })
 });
 
+const getWriter = handleAsync(async (req: Request, res: Response) => {
+    const result = await writerService.getWriter();
+
+    res.status(201).json({
+        message: "Writers retrieved.",
+        data: result
+    })
+});
+
 
 export const writerController = {
     createWriter,
-    updateWriter
+    updateWriter,
+    getWriter
 };

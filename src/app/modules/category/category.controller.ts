@@ -21,11 +21,20 @@ const updateCategory = handleAsync(async (req: Request, res: Response) => {
         message: "Category updated.",
         data: result
     })
-})
+});
 
+const getCategory = handleAsync(async (req: Request, res: Response) => {
+    const result = await categoryService.getCategory();
+
+    res.status(201).json({
+        message: "Category retrieved.",
+        data: result
+    })
+});
 
 
 export const categoryController = {
     createCategory,
-    updateCategory
+    updateCategory,
+    getCategory
 }

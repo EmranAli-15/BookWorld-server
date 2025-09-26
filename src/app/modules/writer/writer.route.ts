@@ -5,6 +5,8 @@ import { auth } from "../../middlewares/auth";
 import { writerController } from "./writer.controller";
 const route = express.Router();
 
+route.get("/writer/getWriter", writerController.getWriter);
+
 route.post("/writer/createWriter", validator(writerValidation.createWriterValidation), auth("admin"), writerController.createWriter);
 
 route.put("/writer/updateWriter/:id", validator(writerValidation.updateWriterValidation), auth("admin"), writerController.updateWriter);
