@@ -1,13 +1,8 @@
 import AppError from "../../errors/AppError";
 import { createAccessToken } from "../../utils/createAccessToken";
 import { decryptHash, makeHash } from "../../utils/hassing";
-import { TLogin, TRegister, TUser } from "./user.interface";
+import { TLogin, TRegister } from "./user.interface";
 import { User } from "./user.model";
-
-
-
-
-
 
 
 
@@ -29,6 +24,8 @@ const loginUser = async (payload: TLogin) => {
         name: isUserExist.name,
         email: payload.email,
         role: isUserExist.role,
+        address: isUserExist.address,
+        phone: isUserExist.phone,
         photo: "",
         userId: isUserExist?._id,
     };
@@ -56,6 +53,8 @@ const registerUser = async (payload: TRegister) => {
         name: payload.name,
         email: payload.email,
         role: createUser.role,
+        address: createUser.address,
+        phone: createUser.phone,
         photo: "",
         userId: createUser?._id,
     };
