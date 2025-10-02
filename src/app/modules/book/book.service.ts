@@ -22,8 +22,9 @@ const getSilgleBook = async (id: any) => {
     return result;
 };
 
-const getBooksByCategory = async (id: string) => {
-    const result = await Book.find({ category: id });
+const getBooksByCategory = async ({ id, page }: { id: string, page: number }) => {
+    const limit = 8;
+    const result = await Book.find({ category: id }).skip(page * limit).limit(limit).populate("category", "name").populate("writer", "name");
     return result;
 }
 

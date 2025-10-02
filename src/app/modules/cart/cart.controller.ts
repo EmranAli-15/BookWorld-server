@@ -40,5 +40,5 @@ const getMyCart = handleAsync(
 export const cartController = {
     saveToCart,
     deleteProductFromCart,
-    getMyCart
+    getMyCart,
 };

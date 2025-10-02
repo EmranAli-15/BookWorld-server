@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { handleAsync } from "../../utils/handleAsync";
 import { bookService } from "./book.service";
-import { Types } from "mongoose";
 
 const createBook = handleAsync(
     async (req: Request, res: Response) => {
@@ -79,7 +78,9 @@ const searchBook = handleAsync(
 const getbooksByCategory = handleAsync(
     async (req: Request, res: Response) => {
         const { id } = req.params;
-        const result = await bookService.getBooksByCategory(id as string);
+        const { page } = req.query;
+
+        const result = await bookService.getBooksByCategory({ id: id as string, page: Number(page) - 1 });
 
         res.status(200).json({
             message: "Category books retrieved.",
