@@ -16,7 +16,7 @@ const updateValidation = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string(),
-    addresss: Joi.string(),
+    address: Joi.string(),
     image: Joi.string()
 });
 
