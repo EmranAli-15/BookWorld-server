@@ -8,7 +8,6 @@ type TRole = "admin" | "user";
 export const auth = (role: TRole) => {
     return handleAsync(
         async (req: Request, res: Response, next: NextFunction) => {
-            
             const token = req.headers.token as string;
 
             if (!token) { 
