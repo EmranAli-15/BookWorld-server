@@ -62,7 +62,7 @@ const searchBook = async (text: string) => {
                 "writerData.name": 1
             }
         }
-    ]);
+    ]).limit(4);
 
     return books;
 }

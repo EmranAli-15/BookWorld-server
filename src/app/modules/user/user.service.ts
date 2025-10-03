@@ -1,7 +1,7 @@
 import AppError from "../../errors/AppError";
 import { createAccessToken } from "../../utils/createAccessToken";
 import { decryptHash, makeHash } from "../../utils/hassing";
-import { TLogin, TRegister } from "./user.interface";
+import { TLogin, TRegister, TUser } from "./user.interface";
 import { User } from "./user.model";
 
 
@@ -63,8 +63,32 @@ const registerUser = async (payload: TRegister) => {
     return accessToken;
 };
 
+const getUser = async (id: string) => {
+    const isUserExist = await User.findById(id, { password: 0 });
+
+    if (!isUserExist) {
+        throw new AppError(404, 'User not exist.');
+    };
+
+    return isUserExist;
+}
+
+const updateUser = async ({ id, payload }: { id: string, payload: TUser }) => {
+
+    const isUserExist = await User.exists({ _id: id });
+
+    if (!isUserExist) {
+        throw new AppError(404, 'User not exist.');
+    };
+
+    const result = User.findByIdAndUpdate(id, { $set: payload });
+    return result
+};
+
 
 export const userService = {
     registerUser,
-    loginUser
+    loginUser,
+    getUser,
+    updateUser
 }

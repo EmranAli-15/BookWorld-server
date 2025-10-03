@@ -25,9 +25,35 @@ const createUser = handleAsync(
     }
 );
 
+const getUser = handleAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await userService.getUser(id as string);
+
+        res.status(201).json({
+            message: "User retrieved successfull.",
+            data: result
+        })
+    }
+);
+
+const updateUser = handleAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await userService.updateUser({ id: id as string, payload: req.body });
+
+        res.status(201).json({
+            message: "User data update successfull.",
+            data: result
+        })
+    }
+);
+
 
 
 export const userController = {
     createUser,
-    loginUser
+    loginUser,
+    getUser,
+    updateUser
 }

@@ -9,4 +9,8 @@ route.post("/user/loginUser", validator(userValidation.loginValidation), userCon
 
 route.post("/user/registerUser", validator(userValidation.registerValidation), userController.createUser);
 
+route.get("/user/getUser/:id", userController.getUser);
+
+route.post("/user/updateUser/:id", validator(userValidation.updateValidation), userController.updateUser);
+
 export const userRoutes = route;

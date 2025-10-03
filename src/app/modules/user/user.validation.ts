@@ -12,8 +12,17 @@ const registerValidation = Joi.object({
     confirmPassword: Joi.ref('password')
 });
 
+const updateValidation = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    phone: Joi.string(),
+    addresss: Joi.string(),
+    image: Joi.string()
+});
+
 
 export const userValidation = {
     loginValidation,
-    registerValidation
+    registerValidation,
+    updateValidation
 }
