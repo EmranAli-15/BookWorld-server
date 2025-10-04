@@ -90,6 +90,19 @@ const getbooksByCategory = handleAsync(
     }
 );
 
+const getbooksByWriter = handleAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        const result = await bookService.getBooksByWriter({ id: id as string });
+
+        res.status(200).json({
+            message: "Writer books retrieved.",
+            data: result
+        });
+    }
+);
+
 export const bookController = {
     createBook,
     updateBook,
@@ -97,5 +110,6 @@ export const bookController = {
     getAllBook,
     deleteBook,
     searchBook,
-    getbooksByCategory
+    getbooksByCategory,
+    getbooksByWriter
 }

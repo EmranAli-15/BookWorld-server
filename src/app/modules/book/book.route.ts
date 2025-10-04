@@ -13,6 +13,8 @@ route.get("/book/getSingleBook/:id", bookController.getSingleBook);
 
 route.get("/book/getCategoryBook/:id", bookController.getbooksByCategory);
 
+route.get("/book/getWriterBook/:id", bookController.getbooksByWriter);
+
 route.get("/book/getAllBooks", bookController.getAllBook);
 
 route.get("/book/searchBook", bookController.searchBook);

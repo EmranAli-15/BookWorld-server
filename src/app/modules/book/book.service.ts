@@ -26,6 +26,11 @@ const getBooksByCategory = async ({ id, page }: { id: string, page: number }) =>
     const limit = 8;
     const result = await Book.find({ category: id }).skip(page * limit).limit(limit).populate("category", "name").populate("writer", "name");
     return result;
+};
+
+const getBooksByWriter = async ({ id }: { id: string}) => {
+    const result = await Book.find({ writer: id }).populate("writer")
+    return result;
 }
 
 const getAllBooks = async ({ pageNum, limitNum }: { pageNum: number, limitNum: number }) => {
@@ -76,4 +81,5 @@ export const bookService = {
     getAllBooks,
     searchBook,
     getBooksByCategory,
+    getBooksByWriter
 }
