@@ -15,7 +15,8 @@ const createBook = handleAsync(
 
 const updateBook = handleAsync(
     async (req: Request, res: Response) => {
-        const result = await bookService.updateBook(req.body);
+        const { id } = req.params;
+        const result = await bookService.updateBook({ id, payload: req.body });
 
         res.status(201).json({
             message: "Book updated.",

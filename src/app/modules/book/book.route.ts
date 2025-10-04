@@ -7,7 +7,7 @@ const route = Router();
 
 route.post("/book/createBook", validator(bookValidation.createBookValidation), auth("admin"), bookController.createBook);
 
-route.put("/book/updateBook", validator(bookValidation.updateBookValidation), auth("admin"), bookController.updateBook);
+route.put("/book/updateBook/:id", validator(bookValidation.updateBookValidation), auth("admin"), bookController.updateBook);
 
 route.get("/book/getSingleBook/:id", bookController.getSingleBook);
 
