@@ -26,12 +26,50 @@ const loginUser = async (payload: TLogin) => {
         role: isUserExist.role,
         address: isUserExist.address,
         phone: isUserExist.phone,
-        photo: "",
+        photo: isUserExist.image,
         userId: isUserExist?._id,
     };
 
     const accessToken = createAccessToken(jwtPayload);
     return accessToken;
+}
+
+const googleLogin = async (payload: TUser) => {
+    const { email, name } = payload;
+    const isExist = await User.findOne({ email });
+
+    if (!isExist) {
+        const password = "123456"
+        const data = { email, name, password, role: "user" };
+        data.password = await makeHash(data.password)
+        const createUser = await User.create(data);
+
+        const jwtPayload = {
+            name: payload.name,
+            email: payload.email,
+            role: createUser.role,
+            address: createUser.address,
+            phone: createUser.phone,
+            photo: "",
+            userId: createUser?._id,
+        };
+        const accessToken = createAccessToken(jwtPayload);
+        return accessToken;
+    }
+    else {
+        const jwtPayload = {
+            name: isExist.name,
+            email: payload.email,
+            role: isExist.role,
+            address: isExist.address,
+            phone: isExist.phone,
+            photo: isExist.image,
+            userId: isExist?._id,
+        };
+
+        const accessToken = createAccessToken(jwtPayload);
+        return accessToken;
+    }
 }
 
 const registerUser = async (payload: TRegister) => {
@@ -90,5 +128,6 @@ export const userService = {
     registerUser,
     loginUser,
     getUser,
-    updateUser
+    updateUser,
+    googleLogin
 }

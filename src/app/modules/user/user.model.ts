@@ -29,7 +29,7 @@ const userSchema = new Schema<TUser>(
         },
         role: {
             type: String,
-            required: false
+            required: true
         },
     },
     {

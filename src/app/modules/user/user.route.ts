@@ -8,6 +8,8 @@ const route = express.Router();
 
 route.post("/user/loginUser", validator(userValidation.loginValidation), userController.loginUser);
 
+route.post("/user/googleLogin", userController.googleLogin);
+
 route.post("/user/registerUser", validator(userValidation.registerValidation), userController.createUser);
 
 route.get("/user/getUser/:id", auth("user"), userController.getUser);
