@@ -20,7 +20,8 @@
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.18.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vercel": "^48.2.9"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

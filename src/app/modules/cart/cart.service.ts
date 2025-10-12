@@ -1,7 +1,11 @@
-import { Book } from "../book/book.model";
+import AppError from "../../errors/AppError";
 import { Cart } from "./cart.model"
 
 const saveProduct = async (payload: { userId: string, productId: string }) => {
+    const isExist = await Cart.exists({userId: payload.userId, productId:payload.productId});
+    if(isExist){
+        throw new AppError(404, "Product is exist in your cart.")
+    }
     const result = await Cart.create(payload);
     return result;
 };
