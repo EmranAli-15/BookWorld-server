@@ -13,11 +13,11 @@ const registerValidation = Joi.object({
 });
 
 const updateValidation = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.string(),
-    address: Joi.string(),
-    image: Joi.string()
+    name: Joi.string().optional(),
+    email: Joi.string().optional(),
+    phone: Joi.string().optional(),
+    address: Joi.string().optional(),
+    image: Joi.string().optional()
 });
 
 

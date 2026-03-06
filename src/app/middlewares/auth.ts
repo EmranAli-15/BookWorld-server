@@ -8,7 +8,9 @@ type TRole = "admin" | "user";
 export const auth = (role: TRole) => {
     return handleAsync(
         async (req: Request, res: Response, next: NextFunction) => {
-            const token = req.headers.token as string;
+            const bearer = req.headers.authorization;
+
+            const token = bearer?.split(" ")[1];
 
             if (!token) { 
                 throw new AppError(403, "Not authorized.")

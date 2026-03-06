@@ -7,13 +7,18 @@ import { bookRoutes } from './app/modules/book/book.route';
 import { cartRoutes } from './app/modules/cart/cart.route';
 export const app = express();
 export const port = process.env.PORT || 5000;
-app.use(express.json());
 
 app.use(cors({
   origin: ['https://bookworld-client.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
+// app.options('*', cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', categoryRoutes);
 app.use('/api', userRoutes);
@@ -22,5 +27,5 @@ app.use('/api', bookRoutes);
 app.use('/api', cartRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hello from Express with TypeScript!');
+  res.send('Hello from Express with TypeScript!');
 });
