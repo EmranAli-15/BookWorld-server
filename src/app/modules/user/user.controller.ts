@@ -1,71 +1,49 @@
 import { Request, Response } from "express";
 import { handleAsync } from "../../utils/handleAsync";
 import { userService } from "./user.service";
-
-
-const loginUser = handleAsync(
-    async (req: Request, res: Response) => {
-        const result = await userService.loginUser(req.body);
-
-        res.status(200).json({
-            message: "User login complete.",
-            data: result
-        })
-    }
-);
-
-const googleLogin = handleAsync(
-    async (req: Request, res: Response) => {
-        const result = await userService.googleLogin(req.body);
-
-        res.status(200).json({
-            message: "User login complete.",
-            data: result
-        })
-    }
-);
-
-const createUser = handleAsync(
-    async (req: Request, res: Response) => {
-        const result = await userService.registerUser(req.body);
-
-        res.status(201).json({
-            message: "User register complete.",
-            data: result
-        })
-    }
-);
-
-const getUser = handleAsync(
-    async (req: Request, res: Response) => {
-        const { id } = req.params;
-        const result = await userService.getUser(id as string);
-
-        res.status(201).json({
-            message: "User retrieved successfull.",
-            data: result
-        })
-    }
-);
-
-const updateUser = handleAsync(
-    async (req: Request, res: Response) => {
-        const { id } = req.params;
-        const result = await userService.updateUser({ id: id as string, payload: req.body });
-
-        res.status(201).json({
-            message: "User data update successfull.",
-            data: result
-        })
-    }
-);
+import { BaseController } from "../../utils/baseController";
 
 
 
-export const userController = {
-    createUser,
-    loginUser,
-    getUser,
-    updateUser,
-    googleLogin
+class UserController extends BaseController {
+
+    loginUser = handleAsync(
+        async (req: Request, res: Response) => {
+            const result = await userService.loginUser(req.body);
+            this.sendResponse(res, result, "User login complete.");
+        }
+    );
+
+    googleLogin = handleAsync(
+        async (req: Request, res: Response) => {
+            const result = await userService.googleLogin(req.body);
+            this.sendResponse(res, result, "User login complete.");
+        }
+    );
+
+    createUser = handleAsync(
+        async (req: Request, res: Response) => {
+            const result = await userService.registerUser(req.body);
+            this.sendResponse(res, result, "User register complete.", 201);
+        }
+    );
+
+    getUser = handleAsync(
+        async (req: Request, res: Response) => {
+            const { id } = req.params;
+            const result = await userService.getUser(id as string);
+            this.sendResponse(res, result, "User retrieved successfully.");
+        }
+    );
+
+    updateUser = handleAsync(
+        async (req: Request, res: Response) => {
+            const { id } = req.params;
+            const data = req.body
+            const result = await userService.updateUser({ id, data });
+            this.sendResponse(res, result, "User data update successfully.");
+        }
+    );
 }
+
+export const userController = new UserController();

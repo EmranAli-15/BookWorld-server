@@ -4,130 +4,67 @@ import { decryptHash, makeHash } from "../../utils/hassing";
 import { TLogin, TRegister, TUser } from "./user.interface";
 import { User } from "./user.model";
 
-
-
-
-
-const loginUser = async (payload: TLogin) => {
-    const isUserExist = await User.findOne({ email: payload.email });
-
-    if (!isUserExist) {
-        throw new AppError(404, 'User not exist.');
-    };
-
-    const passwordDecoded = await decryptHash(payload.password, isUserExist.password);
-    if (!passwordDecoded) {
-        throw new AppError(404, 'Password incorrect.');
-    };
-
-    const jwtPayload = {
-        name: isUserExist.name,
-        email: payload.email,
-        role: isUserExist.role,
-        address: isUserExist.address,
-        phone: isUserExist.phone,
-        photo: isUserExist.image,
-        userId: isUserExist?._id,
-    };
-
-    const accessToken = createAccessToken(jwtPayload);
-    return accessToken;
-}
-
-const googleLogin = async (payload: TUser) => {
-    const { email, name } = payload;
-    const isExist = await User.findOne({ email });
-
-    if (!isExist) {
-        const password = "123456"
-        const data = { email, name, password, role: "user" };
-        data.password = await makeHash(data.password)
-        const createUser = await User.create(data);
-
+class UserService {
+    //Token Generation
+    private generateAuthResponse(user: any) {
         const jwtPayload = {
-            name: payload.name,
-            email: payload.email,
-            role: createUser.role,
-            address: createUser.address,
-            phone: createUser.phone,
-            photo: "",
-            userId: createUser?._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            address: user.address,
+            phone: user.phone,
+            photo: user.image || "",
+            userId: user._id,
         };
-        const accessToken = createAccessToken(jwtPayload);
-        return accessToken;
+        return createAccessToken(jwtPayload);
     }
-    else {
-        const jwtPayload = {
-            name: isExist.name,
-            email: payload.email,
-            role: isExist.role,
-            address: isExist.address,
-            phone: isExist.phone,
-            photo: isExist.image,
-            userId: isExist?._id,
-        };
 
-        const accessToken = createAccessToken(jwtPayload);
-        return accessToken;
+    async loginUser(payload: TLogin) {
+        const isUserExist = await User.findOne({ email: payload.email });
+        if (!isUserExist) throw new AppError(404, 'User not exist.');
+
+        const passwordDecoded = await decryptHash(payload.password, isUserExist.password);
+        if (!passwordDecoded) throw new AppError(403, 'Password incorrect.');
+
+        return this.generateAuthResponse(isUserExist);
+    }
+
+    async googleLogin(payload: TUser) {
+        const { email, name } = payload;
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            const hashedPassword = await makeHash("123456");
+            user = await User.create({ email, name, password: hashedPassword, role: "user" });
+        }
+
+        return this.generateAuthResponse(user);
+    }
+
+    async registerUser(payload: TRegister) {
+        const { name, email, password, confirmPassword } = payload;
+
+        if (await User.exists({ email })) throw new AppError(409, 'User already exists.');
+        if (password !== confirmPassword) throw new AppError(403, 'Password not matched.');
+
+        const hashedPassword = await makeHash(password);
+        const newUser = await User.create({ name, email, password: hashedPassword, role: "user" });
+
+        return this.generateAuthResponse(newUser);
+    }
+
+    async updateUser({ id, data }: { id: any, data: TUser }) {
+        const isUserExist = await User.exists({ _id: id });
+        if (!isUserExist) throw new AppError(404, 'User not exist.');
+
+        return await User.findByIdAndUpdate(id, { $set: data }, { new: true });
+    }
+
+    async getUser(id: string) {
+        const user = await User.findById(id, { password: 0 });
+        if (!user) throw new AppError(404, 'User not exist.');
+        return user;
     }
 }
 
-const registerUser = async (payload: TRegister) => {
-    const { name, email, password, confirmPassword } = payload;
-
-    const isUserExist = await User.exists({ email });
-
-    if (isUserExist) {
-        throw new AppError(409, 'User alreday exist.');
-    };
-
-    if (password !== confirmPassword) throw new AppError(403, 'Password not matched.');
-
-    const data = { name, email, password, role: "user" }
-    data.password = await makeHash(data.password)
-    const createUser = await User.create(data);
-
-    const jwtPayload = {
-        name: payload.name,
-        email: payload.email,
-        role: createUser.role,
-        address: createUser.address,
-        phone: createUser.phone,
-        photo: "",
-        userId: createUser?._id,
-    };
-
-    const accessToken = createAccessToken(jwtPayload);
-    return accessToken;
-};
-
-const getUser = async (id: string) => {
-    const isUserExist = await User.findById(id, { password: 0 });
-
-    if (!isUserExist) {
-        throw new AppError(404, 'User not exist.');
-    };
-
-    return isUserExist;
-}
-
-const updateUser = async ({ id, payload }: { id: string, payload: TUser }) => {
-
-    const isUserExist = await User.exists({ _id: id });
-
-    if (!isUserExist) {
-        throw new AppError(404, 'User not exist.');
-    };
-
-    const result = User.findByIdAndUpdate(id, { $set: payload });
-    return result
-};
-
-
-export const userService = {
-    registerUser,
-    loginUser,
-    getUser,
-    updateUser,
-    googleLogin
-}
+export const userService = new UserService();
