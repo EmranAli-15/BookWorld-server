@@ -5,6 +5,7 @@ import { userRoutes } from './app/modules/user/user.route';
 import { writerRoutes } from './app/modules/writer/writer.route';
 import { bookRoutes } from './app/modules/book/book.route';
 import { cartRoutes } from './app/modules/cart/cart.route';
+import { usersOrdersRoutes } from './app/modules/users-orders/users-orders.route';
 export const app = express();
 export const port = process.env.PORT || 5000;
 
@@ -25,6 +26,7 @@ app.use('/api', userRoutes);
 app.use('/api', writerRoutes);
 app.use('/api', bookRoutes);
 app.use('/api', cartRoutes);
+app.use('/api', usersOrdersRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Express with TypeScript!');
