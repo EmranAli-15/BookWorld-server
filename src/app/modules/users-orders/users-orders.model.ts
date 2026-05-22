@@ -10,6 +10,10 @@ const userOrderSchema = new Schema<TUserOrders>(
         status: {
             type: String,
             required: true
+        },
+        products: {
+            type: [],
+            required: true
         }
     },
     {
