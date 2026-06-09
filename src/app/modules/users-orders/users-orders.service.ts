@@ -56,6 +56,10 @@ class UsersOrdersService {
         } finally {
             await session.endSession();
         }
+    };
+
+    async getMyOrder(userId: string) {
+        // const result = await 
     }
 }
 
