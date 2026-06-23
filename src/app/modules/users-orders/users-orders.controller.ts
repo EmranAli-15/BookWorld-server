@@ -5,11 +5,20 @@ import { usersOrdersService } from "./users-orders.service";
 
 class UsersOrdersController extends BaseController {
     createOrder = handleAsync(
-        async (req:Request, res:Response) => {
+        async (req: Request, res: Response) => {
             const data = req.body;
             const result = await usersOrdersService.createOrder(data);
 
-            this.sendResponse(res, result, "User order complete.", 201)
+            this.sendResponse(res, result, "User order complete.", 201);
+        }
+    );
+
+    getMyOrder = handleAsync(
+        async (req: Request, res: Response) => {
+            const { userId } = req.params;
+            const result = await usersOrdersService.getMyOrder(userId as string);
+
+            this.sendResponse(res, result, "User orders retrieved.", 200);
         }
     )
 };

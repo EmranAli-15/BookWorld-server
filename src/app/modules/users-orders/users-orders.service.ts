@@ -59,8 +59,50 @@ class UsersOrdersService {
     };
 
     async getMyOrder(userId: string) {
-        // const result = await 
-    }
+        const result = await usersOrders.aggregate([
+            {
+                $match: { userId: new mongoose.Types.ObjectId(userId) }
+            },
+            {
+                $lookup: {
+                    from: "orderedproducts",
+                    localField: "_id",
+                    foreignField: "orderedId",
+                    as: "all_orders"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$all_orders"
+                }
+            },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "all_orders.productId",
+                    foreignField: "_id",
+                    as: "all_orders.product_details"
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    all_orders: { $push: "$all_orders" }
+                }
+            },
+            {
+                $project: {
+                    "all_orders.product_details.name": 1,
+                    "all_orders.product_details.image": 1,
+                    "all_orders.price": 1,
+                    "all_orders.quantity": 1,
+                    "all_orders.productId": 1,
+                }
+            }
+        ])
+        console.log(result)
+        return result;
+    };
 }
 
 export const usersOrdersService = new UsersOrdersService();
