@@ -58,51 +58,109 @@ class UsersOrdersService {
         }
     };
 
+    // async getMyOrder(userId: string) {
+    //     const result = await usersOrders.aggregate([
+    //         {
+    //             $match: { userId: new mongoose.Types.ObjectId(userId) }
+    //         },
+    //         {
+    //             $lookup: {
+    //                 from: "orderedproducts",
+    //                 localField: "_id",
+    //                 foreignField: "orderedId",
+    //                 as: "all_orders"
+    //             }
+    //         },
+    //         {
+    //             $unwind: {
+    //                 path: "$all_orders"
+    //             }
+    //         },
+    //         {
+    //             $lookup: {
+    //                 from: "books",
+    //                 localField: "all_orders.productId",
+    //                 foreignField: "_id",
+    //                 as: "all_orders.product_details"
+    //             }
+    //         },
+    //         {
+    //             $unwind: {
+    //                 path: "$all_orders.product_details"
+    //             }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: "$_id",
+    //                 status: { $first: "$status" },
+    //                 createdAt: { $first: "$createdAt" },
+    //                 all_orders: { $push: "$all_orders" },
+    //             }
+    //         },
+    //         {
+    //             $project: {
+    //                 "status": 1,
+    //                 "createdAt": 1,
+    //                 "all_orders.price": 1,
+    //                 "all_orders.quantity": 1,
+    //                 "all_orders.productId": 1,
+    //                 "all_orders.product_details.name": 1,
+    //                 "all_orders.product_details.image": 1,
+    //                 "all_orders.product_details.price": 1,
+    //             }
+    //         }
+    //     ])
+
+    //     return result;
+    // };
+
     async getMyOrder(userId: string) {
-        const result = await usersOrders.aggregate([
-            {
-                $match: { userId: new mongoose.Types.ObjectId(userId) }
-            },
-            {
-                $lookup: {
-                    from: "orderedproducts",
-                    localField: "_id",
-                    foreignField: "orderedId",
-                    as: "all_orders"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$all_orders"
-                }
-            },
-            {
-                $lookup: {
-                    from: "books",
-                    localField: "all_orders.productId",
-                    foreignField: "_id",
-                    as: "all_orders.product_details"
-                }
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    all_orders: { $push: "$all_orders" }
-                }
-            },
-            {
-                $project: {
-                    "all_orders.product_details.name": 1,
-                    "all_orders.product_details.image": 1,
-                    "all_orders.price": 1,
-                    "all_orders.quantity": 1,
-                    "all_orders.productId": 1,
-                }
+    const result = await usersOrders.aggregate([
+        {
+            $match: { userId: new mongoose.Types.ObjectId(userId) }
+        },
+        {
+            $lookup: {
+                from: "orderedproducts",
+                localField: "_id",
+                foreignField: "orderedId",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "books",
+                            localField: "productId",
+                            foreignField: "_id",
+                            as: "product_details"
+                        }
+                    },
+                    {
+                        $unwind: { path: "$product_details" }
+                    },
+                    {
+                        $project: {
+                            price: 1,
+                            quantity: 1,
+                            productId: 1,
+                            "product_details.name": 1,
+                            "product_details.image": 1,
+                            "product_details.price": 1
+                        }
+                    }
+                ],
+                as: "all_orders"
             }
-        ])
-        console.log(result)
-        return result;
-    };
+        },
+        {
+            $project: {
+                status: 1,
+                createdAt: 1,
+                all_orders: 1
+            }
+        }
+    ]);
+
+    return result;
+}
 }
 
 export const usersOrdersService = new UsersOrdersService();
