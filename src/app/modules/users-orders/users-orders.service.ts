@@ -115,52 +115,55 @@ class UsersOrdersService {
     // };
 
     async getMyOrder(userId: string) {
-    const result = await usersOrders.aggregate([
-        {
-            $match: { userId: new mongoose.Types.ObjectId(userId) }
-        },
-        {
-            $lookup: {
-                from: "orderedproducts",
-                localField: "_id",
-                foreignField: "orderedId",
-                pipeline: [
-                    {
-                        $lookup: {
-                            from: "books",
-                            localField: "productId",
-                            foreignField: "_id",
-                            as: "product_details"
+        const result = await usersOrders.aggregate([
+            {
+                $match: { userId: new mongoose.Types.ObjectId(userId) }
+            },
+            {
+                $lookup: {
+                    from: "orderedproducts",
+                    localField: "_id",
+                    foreignField: "orderedId",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "books",
+                                localField: "productId",
+                                foreignField: "_id",
+                                as: "product_details"
+                            }
+                        },
+                        {
+                            $unwind: { path: "$product_details" }
+                        },
+                        {
+                            $project: {
+                                price: 1,
+                                quantity: 1,
+                                productId: 1,
+                                "product_details.name": 1,
+                                "product_details.image": 1,
+                                "product_details.price": 1
+                            }
                         }
-                    },
-                    {
-                        $unwind: { path: "$product_details" }
-                    },
-                    {
-                        $project: {
-                            price: 1,
-                            quantity: 1,
-                            productId: 1,
-                            "product_details.name": 1,
-                            "product_details.image": 1,
-                            "product_details.price": 1
-                        }
-                    }
-                ],
-                as: "all_orders"
+                    ],
+                    as: "all_orders"
+                }
+            },
+            {
+                $sort: { createdAt: -1 } // -1 for Newest First, 1 for Oldest First
+            },
+            {
+                $project: {
+                    status: 1,
+                    createdAt: 1,
+                    all_orders: 1
+                }
             }
-        },
-        {
-            $project: {
-                status: 1,
-                createdAt: 1,
-                all_orders: 1
-            }
-        }
-    ]);
+        ]);
 
-    return result;
-}
+        return result;
+    }
 }
 
 export const usersOrdersService = new UsersOrdersService();
