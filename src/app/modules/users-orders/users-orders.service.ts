@@ -163,6 +163,11 @@ class UsersOrdersService {
         ]);
 
         return result;
+    };
+
+    async getPendingOrder(){
+        const result = await usersOrders.find({status: "pending"});
+        return result;
     }
 }
 

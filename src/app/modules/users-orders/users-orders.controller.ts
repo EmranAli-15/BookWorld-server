@@ -20,6 +20,14 @@ class UsersOrdersController extends BaseController {
 
             this.sendResponse(res, result, "User orders retrieved.", 200);
         }
+    );
+
+    getPendingOrder = handleAsync(
+        async (req:Request, res:Response) => {
+            const result = await usersOrdersService.getPendingOrder();
+
+            this.sendResponse(res, result, "Pending orders retrieved.", 200);
+        }
     )
 };
 
